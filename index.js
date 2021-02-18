@@ -79,6 +79,35 @@ inquirer
             else if(response.initialChoice === "Add Department") {
                 console.log(2);
     
+                inquirer
+                    .prompt([
+                        {
+                            type: "input",
+                            name: "id",
+                            message: "What is the department's id?"
+                        },
+                        {
+                            type: "input",
+                            name: "name",
+                            message: "What is the department's name? (30 Characters)"
+                        }
+                    ]).then((response) => {
+                        const asd = Object.keys(response).filter(k => response[k] !== '').reduce((res, key) => {
+                            res[key] = response[key];
+                            return res;
+                        }, {});
+
+                        console.log('AAD', asd)
+
+                        connection.query("INSERT INTO department SET ?", asd, (queryErr, queryResponse) => {
+                            if (queryErr) {
+                                throw queryErr;
+                            }
+                            console.log("Success");
+                            connection.end();
+                    });
+                });
+
             }
             else if(response.initialChoice === "Add Role") {
                 console.log(3);

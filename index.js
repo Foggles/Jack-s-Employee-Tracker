@@ -33,7 +33,7 @@ inquirer
             if (connectionError) {
                 throw connectionError;
             }
-            else if(response.initialChoice === "Add Employee") {
+            else if (response.initialChoice === "Add Employee") {
                 console.log(1);
 
                 inquirer
@@ -72,13 +72,13 @@ inquirer
                             }
                             console.log("Success");
                             connection.end();
+                        });
                     });
-                });
-    
+
             }
-            else if(response.initialChoice === "Add Department") {
+            else if (response.initialChoice === "Add Department") {
                 console.log(2);
-    
+
                 inquirer
                     .prompt([
                         {
@@ -105,29 +105,68 @@ inquirer
                             }
                             console.log("Success");
                             connection.end();
+                        });
                     });
-                });
 
             }
-            else if(response.initialChoice === "Add Role") {
+            else if (response.initialChoice === "Add Role") {
                 console.log(3);
-    
+
+                inquirer
+                    .prompt([
+                        {
+                            type: "input",
+                            name: "id",
+                            message: "What is the role's id?"
+                        },
+                        {
+                            type: "input",
+                            name: "title",
+                            message: "What is the title of the role? (30 Characters)"
+                        },
+                        {
+                            type: "input",
+                            name: "salary",
+                            message: "What is the role's salary?"
+                        },
+                        {
+                            type: "input",
+                            name: "department_id",
+                            message: "What is the id of the department this role belongs to?"
+                        }
+                    ]).then((response) => {
+                        const asd = Object.keys(response).filter(k => response[k] !== '').reduce((res, key) => {
+                            res[key] = response[key];
+                            return res;
+                        }, {});
+
+                        console.log('AAD', asd)
+
+                        connection.query("INSERT INTO role SET ?", asd, (queryErr, queryResponse) => {
+                            if (queryErr) {
+                                throw queryErr;
+                            }
+                            console.log("Success");
+                            connection.end();
+                        });
+                    });
+
             }
-            else if(response.initialChoice === "View Employees") {
+            else if (response.initialChoice === "View Employees") {
                 console.log(4);
-    
+
             }
-            else if(response.initialChoice === "View Departments") {
+            else if (response.initialChoice === "View Departments") {
                 console.log(5);
-    
+
             }
-            else if(response.initialChoice === "View Roles") {
+            else if (response.initialChoice === "View Roles") {
                 console.log(6);
-    
+
             }
-            else if(response.initialChoice === "Update Employee Roles") {
+            else if (response.initialChoice === "Update Employee Roles") {
                 console.log(7);
-    
+
             }
         })
 

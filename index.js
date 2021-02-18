@@ -5,7 +5,7 @@ const connectionConfig = {
     host: "localhost",
     port: 3306,
     user: "root",
-    passwoord: "12345",
+    password: "12345",
     database: "employees_db"
 };
 
@@ -35,6 +35,45 @@ inquirer
             }
             else if(response.initialChoice === "Add Employee") {
                 console.log(1);
+
+                inquirer
+                    .prompt([
+                        {
+                            type: "input",
+                            name: "first_name",
+                            message: "What is the employee's first name? (30 Characters)"
+                        },
+                        {
+                            type: "input",
+                            name: "last_name",
+                            message: "What is the employee's last name? (30 Characters)"
+                        },
+                        {
+                            type: "input",
+                            name: "role_id",
+                            message: "What is the employee's role id?"
+                        },
+                        {
+                            type: "input",
+                            name: "manager_id",
+                            message: "What is the employee's manager's id? Can be left blank if no manager."
+                        }
+                    ]).then((response) => {
+                        const asd = Object.keys(response).filter(k => response[k] !== '').reduce((res, key) => {
+                            res[key] = response[key];
+                            return res;
+                        }, {});
+
+                        console.log('AAD', asd)
+
+                        connection.query("INSERT INTO employee SET ?", asd, (queryErr, queryResponse) => {
+                            if (queryErr) {
+                                throw queryErr;
+                            }
+                            console.log("Success");
+                            connection.end();
+                    });
+                });
     
             }
             else if(response.initialChoice === "Add Department") {

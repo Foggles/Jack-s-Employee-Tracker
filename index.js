@@ -11,6 +11,7 @@ const connectionConfig = {
 
 const connection = mysql.createConnection(connectionConfig);
 
+// Function to add employee
 function addEmployee() {
     inquirer
         .prompt([
@@ -52,6 +53,7 @@ function addEmployee() {
         });
 };
 
+// Function to add department
 function addDepartment() {
     inquirer
         .prompt([
@@ -83,6 +85,7 @@ function addDepartment() {
         });
 };
 
+// Function to add a role
 function addRole() {
     inquirer
         .prompt([
@@ -124,6 +127,7 @@ function addRole() {
         });
 };
 
+// Function to view all current employees
 function viewEmployees() {
     connection.query("SELECT * FROM employee", (queryErr, queryResponse) => {
 
@@ -133,6 +137,7 @@ function viewEmployees() {
     });
 };
 
+// Function to view all current departments
 function viewDepartments() {
     connection.query("SELECT * FROM department", (queryErr, queryResponse) => {
 
@@ -142,6 +147,7 @@ function viewDepartments() {
     });
 };
 
+// Function to view all current roles
 function viewRoles() {
     connection.query("SELECT * FROM role", (queryErr, queryResponse) => {
 
@@ -151,6 +157,7 @@ function viewRoles() {
     });
 };
 
+// Function to view a table with current employees, departments and roles
 function viewTable() {
     connection.query("SELECT employee.*, role.*, department.* FROM employee INNER JOIN role ON employee.role_id = role.id INNER JOIN department ON role.department_id = department.id", 
     (queryErr, queryResponse) => {
@@ -161,6 +168,7 @@ function viewTable() {
     })
 };
 
+// Function to update a specific employee's role 
 function updateEmployeeRole(id) {
     connection.query("SELECT employee.* FROM employee WHERE id = ?",
     [id],
@@ -192,6 +200,7 @@ function updateEmployeeRole(id) {
     })
 };
 
+// Function that handles the menu to allow user to select options
 function startMenu() {
     inquirer
         .prompt([

@@ -152,7 +152,7 @@ function viewRoles() {
 };
 
 function viewTable() {
-    connection.query("SELECT employee.*, role.* FROM employee INNER JOIN role ON employee.role_id = role.id INNER JOIN department ON role.department_id = department.id", 
+    connection.query("SELECT employee.*, role.*, department.* FROM employee INNER JOIN role ON employee.role_id = role.id INNER JOIN department ON role.department_id = department.id", 
     (queryErr, queryResponse) => {
         if (queryErr) throw queryErr;
         const result = queryResponse;
@@ -161,8 +161,35 @@ function viewTable() {
     })
 };
 
-function updateEmployeeRole() {
+function updateEmployeeRole(id) {
+    connection.query("SELECT employee.* FROM employee WHERE id = ?",
+    [id],
+    (queryErr, queryResponse) => {
+        if (queryErr) throw (queryErr);
+        console.table(queryResponse);
+        inquirer  
+            .prompt([
+                {
+                    type: "input",
+                    name: "role_id",
+                    message: "What is the new Role ID for this employee?"
+                }
+            ]).then((response) => {
+                // const asd = Object.keys(response).filter(k => response[k] !== '').reduce((res, key) => {
+                //     res[key] = response[key];
+                //     return res;
+                // }, {});
 
+                const newRoleId = response.role_id;
+                const employeeId = id;
+
+                connection.query("UPDATE employee SET role_id = ? WHERE employee.id = ?", [newRoleId, employeeId], (queryErr, queryResponse) => {
+                    if (queryErr) throw queryErr;
+                    console.log("Success");
+                    startMenu();
+                });
+            })
+    })
 };
 
 function startMenu() {
@@ -229,7 +256,17 @@ function startMenu() {
             else if (response.initialChoice === "Update Employee Roles") {
                 console.log(8);
 
-                updateEmployeeRole();
+                inquirer
+                    .prompt([
+                        {
+                            type: "input",
+                            name: "selectedEmployeeId",
+                            message: "What is the id of the employee who's role you want to update?"
+                        }
+                    ]).then((response) => {
+                        id = response.selectedEmployeeId;
+                        updateEmployeeRole(id);
+                    })
             }
             else {
                 connection.end();

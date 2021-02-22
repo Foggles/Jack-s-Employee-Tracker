@@ -151,6 +151,16 @@ function viewRoles() {
     });
 };
 
+function viewTable() {
+    connection.query("SELECT employee.*, role.* FROM employee INNER JOIN role ON employee.role_id = role.id INNER JOIN department ON role.department_id = department.id", 
+    (queryErr, queryResponse) => {
+        if (queryErr) throw queryErr;
+        const result = queryResponse;
+        console.table(result);
+        startMenu();
+    })
+};
+
 function updateEmployeeRole() {
 
 };
@@ -168,6 +178,7 @@ function startMenu() {
                     "View Employees",
                     "View Departments",
                     "View Roles",
+                    "View Combined Table",
                     "Update Employee Roles",
                     "Exit Menu"
                 ],
@@ -210,8 +221,13 @@ function startMenu() {
 
                 viewRoles();
             }
-            else if (response.initialChoice === "Update Employee Roles") {
+            else if (response.initialChoice === "View Combined Table") {
                 console.log(7);
+
+                viewTable();
+            }
+            else if (response.initialChoice === "Update Employee Roles") {
+                console.log(8);
 
                 updateEmployeeRole();
             }
